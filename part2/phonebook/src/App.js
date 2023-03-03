@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { getAll, createPerson } from './services/phonebook'
+import { getAll, createPerson, deletePerson } from './services/phonebook'
 
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
@@ -36,7 +36,11 @@ const App = () => {
     setNewNumber('')
   }
 
-  const filteredPersons = persons.filter(person => person.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+  const handleDelete = id => {
+    deletePerson(id).then(data => getAll().then(data => setPersons(data)))
+  }
+
+  const filteredPersons = search === '' ? persons : persons.filter(person => person.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
 
   return (
     <div>
@@ -53,7 +57,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <PersonsList filteredPersons={filteredPersons} />
+      <PersonsList filteredPersons={filteredPersons} deleteHandler={handleDelete} />
     </div>
   )
 }
