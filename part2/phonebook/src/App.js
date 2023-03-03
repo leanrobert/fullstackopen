@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { getAll, createPerson, deletePerson } from './services/phonebook'
+import { getAll, createPerson, updatePerson, deletePerson } from './services/phonebook'
 
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
@@ -27,7 +27,11 @@ const App = () => {
     }
 
     if(persons.filter(person => person.name === newPerson.name).length > 0) {
-      alert(`${newName} is already added to phonebook`)
+      if(window.confirm(`${newName} is already added to phonebook`)) {
+        const person = persons.find(p => p.name === newPerson.name)
+        updatePerson(person.id, newPerson).then(returnedPerson => setPersons(persons.map(per => per.id !== person.id ? per : returnedPerson )))
+      }
+
     } else {
       createPerson(newPerson).then(data => setPersons(persons.concat(data)))
     }
