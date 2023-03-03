@@ -5,12 +5,14 @@ import { getAll, createPerson, updatePerson, deletePerson } from './services/pho
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import PersonsList from './components/PersonsList'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     getAll().then(data => setPersons(data))
@@ -27,13 +29,18 @@ const App = () => {
     }
 
     if(persons.filter(person => person.name === newPerson.name).length > 0) {
-      if(window.confirm(`${newName} is already added to phonebook`)) {
+      if(window.confirm(`${newName} is already added to phonebook, update phone?`)) {
         const person = persons.find(p => p.name === newPerson.name)
         updatePerson(person.id, newPerson).then(returnedPerson => setPersons(persons.map(per => per.id !== person.id ? per : returnedPerson )))
       }
 
     } else {
       createPerson(newPerson).then(data => setPersons(persons.concat(data)))
+      setErrorMessage(`Added ${newPerson.name}`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000)
+
     }
 
     setNewName('')
@@ -49,6 +56,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter search={search} onChange={(e) => setSearch(e.target.value)} />
 
       <h2>add a new</h2>
