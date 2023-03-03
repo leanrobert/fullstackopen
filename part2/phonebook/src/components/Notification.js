@@ -1,10 +1,10 @@
 import React from 'react'
 
-const Notification = ({ message }) => {
+const Notification = ({ message, success }) => {
   if(message === null) return null
 
   return(
-    <div className='error'>
+    <div className='error' style={{ color: `${success ? "green" : "red"}` }}>
       {message}
     </div>
   )

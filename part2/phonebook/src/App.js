@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
+  const [success, setSuccess] = useState(false)
 
   useEffect(() => {
     getAll().then(data => setPersons(data))
@@ -31,12 +32,21 @@ const App = () => {
     if(persons.filter(person => person.name === newPerson.name).length > 0) {
       if(window.confirm(`${newName} is already added to phonebook, update phone?`)) {
         const person = persons.find(p => p.name === newPerson.name)
-        updatePerson(person.id, newPerson).then(returnedPerson => setPersons(persons.map(per => per.id !== person.id ? per : returnedPerson )))
+        updatePerson(person.id, newPerson)
+          .then(returnedPerson => setPersons(persons.map(per => per.id !== person.id ? per : returnedPerson )))
+          .catch(error => {
+            setErrorMessage(`Information of ${newPerson.name} has already been removed from server`)
+            setSuccess(false)
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 3000)
+          })
       }
 
     } else {
       createPerson(newPerson).then(data => setPersons(persons.concat(data)))
       setErrorMessage(`Added ${newPerson.name}`);
+      setSuccess(true)
       setTimeout(() => {
         setErrorMessage(null);
       }, 3000)
@@ -56,7 +66,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification message={errorMessage} success={success} />
       <Filter search={search} onChange={(e) => setSearch(e.target.value)} />
 
       <h2>add a new</h2>
