@@ -1,5 +1,5 @@
 import Course from "./components/Course"
-
+/* Already separated modules */
 const App = () => {
   const courses = [
     {
