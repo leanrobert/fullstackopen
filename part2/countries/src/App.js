@@ -12,6 +12,10 @@ const App = () => {
       .then(res => setCountries(res.data))
   }, [])
 
+  const handleShow = (name) => {
+    setSearch(name)
+  }
+
   const filterCountries = search === '' 
       ? countries 
       : countries.filter(country => country.name.common.toLowerCase().includes(search.toLowerCase()))
@@ -20,7 +24,7 @@ const App = () => {
     <div>
       <p>find countries <input value={search} onChange={e => setSearch(e.target.value)} /></p>
       {filterCountries.length <= 10 && filterCountries.length > 1 ? (
-        <CountryList countries={filterCountries} />
+        <CountryList countries={filterCountries} handleShow={handleShow} />
       ) : (
         filterCountries.length === 1 ? (
           <CountryDetail country={filterCountries[0]} />
