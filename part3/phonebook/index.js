@@ -1,6 +1,9 @@
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const app = express()
 
@@ -30,6 +33,8 @@ let data = [
     "number": "39-23-6423122"
   }
 ]
+
+const PORT = process.env.PORT || 3001
 
 morgan.token('data', (req, res) => {
   return JSON.stringify(req.body)
@@ -88,6 +93,6 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
-app.listen(3001, () => {
-  console.log("Server started on port 3001");
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
 })
