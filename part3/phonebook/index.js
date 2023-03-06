@@ -1,4 +1,5 @@
 import express from 'express'
+import morgan from 'morgan'
 
 const app = express()
 
@@ -26,6 +27,8 @@ let data = [
     "number": "39-23-6423122"
   }
 ]
+
+app.use(morgan('tiny'))
 
 app.get('/info', (req, res) => {
   const time = new Date()
