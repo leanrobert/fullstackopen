@@ -28,21 +28,29 @@ morgan.token('data', (req, res) => {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
+app.get('/info', (req, res, next) => {
+  Person.find({})
+    .then(persons => {
+      res.send(`<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`)
+    })
+})
+
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(persons => {
     res.json(persons)
   })
 })
 
-app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = data.filter(phone => phone.id === id)
-
-  if(person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
-  }
+app.get('/api/persons/:id', (req, res, next) => {
+  Person.findById(req.params.id)
+    .then(found => {
+      if (found) {
+        res.json(found)
+      } else {
+        res.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (req, res) => {
