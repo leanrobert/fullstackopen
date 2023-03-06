@@ -33,7 +33,18 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-  res.send(data)
+  res.json(data)
+})
+
+app.get('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id)
+  const person = data.filter(phone => phone.id === id)
+
+  if(person) {
+    res.json(person)
+  } else {
+    res.status(404).end()
+  }
 })
 
 app.listen(3001, () => {
