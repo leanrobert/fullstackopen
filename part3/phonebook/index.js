@@ -46,32 +46,24 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 app.post('/api/persons', (req, res) => {
-  const id = Math.floor(Math.random() * 100000)
-
   if(!req.body.name || !req.body.number) {
     return res.status(404).json({ error: "Missing content" })
   }
 
-  if(data.filter(person => person.name === req.body.name).length >= 1) {
-    return res.status(500).json({ error: "Name must be unique" })
-  }
-
-  const person = {
-    id,
+  const person = new Person({
     name: req.body.name,
     number: req.body.number
-  }
+  })
 
-  data = data.concat(person)
+  person.save().then(res => console.log(`${person.name} created`))
 
   res.json(person)
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  data = data.filter(info => info.id !== id)
-
-  res.status(204).end()
+  Person.findByIdAndRemove(req.params.id)
+    .then(result => res.status(204).end())
+    .catch(err => console.log(err))
 })
 
 app.listen(PORT, () => {
