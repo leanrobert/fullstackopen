@@ -10,8 +10,8 @@ const CountryDetail = ({ country }) => {
           setWeather(res.data)
           console.log(res.data);
         })
-  }, [])
-  
+  }, [country.latlng])
+
   return (
     <div>
       <h1>{country.name.common}</h1>
@@ -29,7 +29,7 @@ const CountryDetail = ({ country }) => {
 
       <h2>Wheather in {country.name.common}</h2>
       <p>temperature {weather?.main.temp} Celcius</p>
-      <img src={`https://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`} />
+      <img src={`https://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`} alt="weather icon" />
       <p>wind {weather?.wind.speed} m/s</p>
     </div>
   )
