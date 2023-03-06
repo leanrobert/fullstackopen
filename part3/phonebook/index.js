@@ -25,6 +25,13 @@ const data = [
   }
 ]
 
+app.get('/info', (req, res) => {
+  const time = new Date()
+  const size = data.length
+
+  res.send(`<p>phonebook hast info for ${size} people</p><p>${time}</p>`)
+})
+
 app.get('/api/persons', (req, res) => {
   res.send(data)
 })
