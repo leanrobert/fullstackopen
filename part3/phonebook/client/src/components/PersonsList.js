@@ -5,7 +5,7 @@ const PersonsList = ({ filteredPersons, deleteHandler }) => {
   return (
     <div>
       {filteredPersons.map(person => (
-        <PersonData key={person.id} person={person} deleteHandler={deleteHandler} />
+        <PersonData key={person._id} person={person} deleteHandler={deleteHandler} />
       ))}
     </div>
   )

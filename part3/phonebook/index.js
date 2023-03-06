@@ -2,6 +2,8 @@ import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import mongoose from 'mongoose'
+import Person from './mongo.js'
 
 dotenv.config()
 
@@ -13,30 +15,12 @@ app.use(express.json())
 
 app.use(express.static('build'))
 
-let data = [
-  {
-    "id": 1,
-    "name": "Arto Hellas",
-    "number": "040-123456"
-  },
-  {
-    "id": 2,
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523"
-  },
-  {
-    "id": 3,
-    "name": "Dan Abramov",
-    "number": "12-43-234345"
-  },
-  {
-    "id": 4,
-    "name": "Mary Poppendieck",
-    "number": "39-23-6423122"
-  }
-]
-
 const PORT = process.env.PORT || 3001
+
+const url = process.env.MONGO_URI
+
+mongoose.set('strictQuery', false)
+mongoose.connect(url)
 
 morgan.token('data', (req, res) => {
   return JSON.stringify(req.body)
@@ -44,15 +28,10 @@ morgan.token('data', (req, res) => {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
-app.get('/info', (req, res) => {
-  const time = new Date()
-  const size = data.length
-
-  res.send(`<p>phonebook hast info for ${size} people</p><p>${time}</p>`)
-})
-
 app.get('/api/persons', (req, res) => {
-  res.json(data)
+  Person.find({}).then(persons => {
+    res.json(persons)
+  })
 })
 
 app.get('/api/persons/:id', (req, res) => {
