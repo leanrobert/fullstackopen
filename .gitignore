@@ -1,5 +1,6 @@
 part*/node_modules
-part*/.env
-
 part*/*/node_modules
 part*/*/*/node_modules
+
+part*/.env
+part*/*/.env
