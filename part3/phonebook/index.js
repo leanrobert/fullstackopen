@@ -2,6 +2,8 @@ import express from 'express'
 
 const app = express()
 
+app.use(express.json())
+
 let data = [
   {
     "id": 1,
@@ -45,6 +47,20 @@ app.get('/api/persons/:id', (req, res) => {
   } else {
     res.status(404).end()
   }
+})
+
+app.post('/api/persons', (req, res) => {
+  const id = Math.floor(Math.random() * 100000)
+
+  const person = {
+    id,
+    name: req.body.name,
+    number: req.body.number
+  }
+
+  data = data.concat(person)
+
+  res.json(person)
 })
 
 app.delete('/api/persons/:id', (req, res) => {
