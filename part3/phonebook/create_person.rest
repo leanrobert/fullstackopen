@@ -1,7 +1,7 @@
-POST https://phonebook-lr.fly.dev/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-  "name": "Leandro",
-  "number": "1234"
+  "name":"pepe",
+  "number":"12345678"
 }

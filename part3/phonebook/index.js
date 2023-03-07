@@ -63,7 +63,9 @@ app.post('/api/persons', (req, res, next) => {
     number: req.body.number
   })
 
-  Person.create({ person }).then(response => res.json(person))
+  console.log(person);
+
+  person.save().then(response => res.json(person))
     .catch(error => next(error))
 })
 

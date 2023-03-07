@@ -25,8 +25,7 @@ const App = () => {
 
     const newPerson = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      number: newNumber
     }
 
     if(persons.filter(person => person.name === newPerson.name).length > 0) {
@@ -44,23 +43,23 @@ const App = () => {
       }
 
     } else {
-      createPerson(newPerson).then(data => {
-        setPersons(persons.concat(data))
-        setErrorMessage(`Added ${newPerson.name}`);
-        setSuccess(true)
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 3000)
-
-      }).catch(error => {
-        setErrorMessage(`${error.response.data.error}`)
-        setSuccess(false)
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 3000)
-      })
-
-
+      createPerson(newPerson)
+        .then(data => {
+          setPersons(persons.concat(data))
+          setErrorMessage(`Added ${newPerson.name}`);
+          setSuccess(true)
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000)
+        })
+        .catch(error => {
+          console.log(error);
+          setErrorMessage(`${error.response.data.error}`)
+          setSuccess(false)
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000)
+        })
     }
 
     setNewName('')
