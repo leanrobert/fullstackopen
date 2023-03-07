@@ -44,12 +44,22 @@ const App = () => {
       }
 
     } else {
-      createPerson(newPerson).then(data => setPersons(persons.concat(data)))
-      setErrorMessage(`Added ${newPerson.name}`);
-      setSuccess(true)
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000)
+      createPerson(newPerson).then(data => {
+        setPersons(persons.concat(data))
+        setErrorMessage(`Added ${newPerson.name}`);
+        setSuccess(true)
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000)
+
+      }).catch(error => {
+        setErrorMessage(`${error.response.data.error}`)
+        setSuccess(false)
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000)
+      })
+
 
     }
 
