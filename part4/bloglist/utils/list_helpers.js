@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const dummy = blogs => {
   return 1
 }
@@ -19,8 +21,31 @@ const favouriteBlog = blogs => {
   }
 }
 
+const mostBlogs = blogs => {
+  const authors = []
+  const results = []
+
+  blogs.forEach(blog => {
+    if(!authors.includes(blog.author)) {
+      authors.push(blog.author)
+      const newObj = {
+        author: blog.author,
+        blogs: 1
+      }
+      results.push(newObj)
+    } else {
+      results.map(result => {
+        result.author === blog.author ? result.blogs += 1 : result.blogs
+      })
+    }
+  });
+
+  return(results.find(blog => blog.blogs === Math.max(...results.map(blog => blog.blogs))));
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favouriteBlog
+  favouriteBlog,
+  mostBlogs
 }
