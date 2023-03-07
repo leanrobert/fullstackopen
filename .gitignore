@@ -5,3 +5,5 @@ part*/*/*/node_modules
 part*/.env
 part*/*/.env
 part*/*/*/.env
+
+notesapp
