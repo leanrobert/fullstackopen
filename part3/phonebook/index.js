@@ -15,20 +15,20 @@ app.use(express.json())
 
 app.use(express.static('build'))
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001 // eslint-disable-line
 
-const url = process.env.MONGO_URI
+const url = process.env.MONGO_URI // eslint-disable-line
 
 mongoose.set('strictQuery', false)
 mongoose.connect(url)
 
-morgan.token('data', (req, res) => {
+morgan.token('data', (req, res) => { // eslint-disable-line
   return JSON.stringify(req.body)
 })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
-app.get('/info', (req, res, next) => {
+app.get('/info', (req, res) => {
   Person.find({})
     .then(persons => {
       res.send(`<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`)
@@ -55,7 +55,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 app.post('/api/persons', (req, res, next) => {
   if(!req.body.name || !req.body.number) {
-    return res.status(404).json({ error: "Missing content" })
+    return res.status(404).json({ error: 'Missing content' })
   }
 
   const person = new Person({
@@ -63,9 +63,9 @@ app.post('/api/persons', (req, res, next) => {
     number: req.body.number
   })
 
-  console.log(person);
+  console.log(person)
 
-  person.save().then(response => res.json(person))
+  person.save().then(response => res.json(person)) // eslint-disable-line
     .catch(error => next(error))
 })
 
@@ -77,14 +77,14 @@ app.put('/api/persons/:id', (req, res, next) => {
     number: body.number
   }
 
-  Person.findByIdAndUpdate(req.params.id, person, { new: true, runValidators: true, context: 'query'})
+  Person.findByIdAndUpdate(req.params.id, person, { new: true, runValidators: true, context: 'query' })
     .then(updated => res.json(updated))
     .catch(err => next(err))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(result => res.status(204).end())
+    .then(result => res.status(204).end()) // eslint-disable-line
     .catch(err => next(err))
 })
 
@@ -103,5 +103,5 @@ const errorhandler = (error, req, res, next) => {
 app.use(errorhandler)
 
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`Server started on port ${PORT}`)
 })
