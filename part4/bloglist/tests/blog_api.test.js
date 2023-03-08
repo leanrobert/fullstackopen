@@ -109,6 +109,20 @@ test('should delete the las post created', async () => {
   expect(blogsAfterDelete.body).toHaveLength(blogs.body.length - 1)
 }, 100000)
 
+test('should update the likes of a blog', async () => {
+  const blogs = await api.get('/api/blogs')
+  const blogToUpdate = blogs.body[0]
+
+  await api.put(`/api/blogs/${blogToUpdate.id}`)
+          .send({ likes: 1 })
+          .expect(200)
+          .expect('Content-Type', /application\/json/)
+
+  const blogsUpdated = await api.get('/api/blogs')
+
+  expect(blogToUpdate.likes).toBe(blogsUpdated.body[0].likes + 1)
+}, 100000)
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
