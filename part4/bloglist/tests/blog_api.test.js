@@ -98,6 +98,17 @@ test('blog post creation without author responds with error', async () => {
           .expect('Content-Type', /application\/json/)
 }, 100000)
 
+test('should delete the las post created', async () => {
+  const blogs = await api.get('/api/blogs')
+  const blogToDelete = blogs.body[0]
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+  const blogsAfterDelete = await api.get('/api/blogs')
+
+  expect(blogsAfterDelete.body).toHaveLength(blogs.body.length - 1)
+}, 100000)
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
