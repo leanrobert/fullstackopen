@@ -56,6 +56,24 @@ test('successfully creates a blog post', async () => {
   expect(content).toContain("blog.com/agregado")
 }, 100000)
 
+test('blog post creation without likes, defaults to 0', async () => {
+  const newBlog = {
+    title: "Sin Likes",
+    author: "Autor Unlike",
+    url: "blog.com/0like",
+  }
+
+  await api.post('/api/blogs')
+          .send(newBlog)
+          .expect(201)
+          .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  const content = response.body.filter(r => r.title === newBlog.title)
+
+  expect(content[0].likes).toBe(0)
+}, 100000)
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
