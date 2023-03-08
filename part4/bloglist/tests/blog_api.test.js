@@ -74,6 +74,30 @@ test('blog post creation without likes, defaults to 0', async () => {
   expect(content[0].likes).toBe(0)
 }, 100000)
 
+test('blog post creation without title responds with error', async () => {
+  const newBlog = {
+    author: "Autor Sin titulos",
+    url: "blog.com/0titulo",
+  }
+
+  await api.post('/api/blogs')
+          .send(newBlog)
+          .expect(400)
+          .expect('Content-Type', /application\/json/)
+}, 100000)
+
+test('blog post creation without author responds with error', async () => {
+  const newBlog = {
+    title: "Sin Autor",
+    url: "blog.com/0autor",
+  }
+
+  await api.post('/api/blogs')
+          .send(newBlog)
+          .expect(400)
+          .expect('Content-Type', /application\/json/)
+}, 100000)
+
 afterAll(async () => {
   await mongoose.connection.close()
 })

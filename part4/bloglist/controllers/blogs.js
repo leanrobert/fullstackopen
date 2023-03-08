@@ -7,6 +7,8 @@ blogRouter.get('/', async (req, res) => {
 })
 
 blogRouter.post('/', async (req, res) => {
+  if(!req.body.title || !req.body.author) return res.status(400).json({ error: "Missing information, pass title, author and url"})
+
   const blog = new Blog({
     title: req.body.title,
     author: req.body.author,
