@@ -3,15 +3,6 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
-const getTokenFrom = req => {
-  const authorization = req.get('authorization')
-  if(authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-
-  return null
-}
-
 blogRouter.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
   res.json(blogs)
@@ -20,7 +11,7 @@ blogRouter.get('/', async (req, res) => {
 blogRouter.post('/', async (req, res) => {
   if(!req.body.title || !req.body.author) return res.status(400).json({ error: "Missing information, pass title, author and url"})
 
-  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
 
   if(!decodedToken.id) return res.status(401).json({ error: 'Token invalid' })
 
