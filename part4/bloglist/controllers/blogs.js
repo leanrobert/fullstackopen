@@ -1,14 +1,13 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+const middleware = require('../utils/middleware')
 
 blogRouter.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
   res.json(blogs)
 })
 
-blogRouter.post('/', async (req, res) => {
+blogRouter.post('/', middleware.userExtractor, async (req, res) => {
   if(!req.body.title || !req.body.author) return res.status(400).json({ error: "Missing information, pass title, author and url"})
 
   const user = req.user
@@ -41,7 +40,7 @@ blogRouter.put('/:id', async (req, res) => {
   res.status(200).json(updatedBlog)
 })
 
-blogRouter.delete('/:id', async (req, res) => {
+blogRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
   const { id } = req.params
 
   const user = req.user
