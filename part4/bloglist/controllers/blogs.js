@@ -1,59 +1,55 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
-const middleware = require('../utils/middleware')
+
+const { userExtractor } = require('../utils/middleware')
 
 blogRouter.get('/', async (req, res) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   res.json(blogs)
 })
 
-blogRouter.post('/', middleware.userExtractor, async (req, res) => {
-  if(!req.body.title || !req.body.author) return res.status(400).json({ error: "Missing information, pass title, author and url"})
+blogRouter.post('/', userExtractor, async (req, res) => {
+  const { title, author, url, likes } = req.body
+
+  const blog = new Blog({
+    title,
+    author,
+    url,
+    likes: likes ? likes : 0,
+  })
 
   const user = req.user
 
-  const blog = new Blog({
-    title: req.body.title,
-    author: req.body.author,
-    url: req.body.url,
-    likes: req.body.likes || 0,
-    user: user.id
-  })
+  if(!user) return res.status(401).json({ error: 'operation not permited' })
+
+  blog.user = user._id
 
   const newBlog = await blog.save()
   user.blogs = user.blogs.concat(newBlog._id)
   await user.save()
+
   res.status(201).json(newBlog)
 })
 
 blogRouter.put('/:id', async (req, res) => {
-  const body = req.body
+  const { title, author, url, likes } = req.body
 
-  const blog = {
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes
-  }
-
-  const updatedBlog = await Blog.findOneAndUpdate(req.params.id, blog, {new:true})
+  const updatedBlog = await Blog.findOneAndUpdate(req.params.id, { title, author, url, likes }, {new:true})
   res.status(200).json(updatedBlog)
 })
 
-blogRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
-  const { id } = req.params
-
+blogRouter.delete('/:id', userExtractor, async (req, res) => {
+  const blog = await Blog.findById(req.params.id)
   const user = req.user
 
-  const blog = await Blog.findById(id).populate('user', { id: 1 })
-
-  if (!user) return res.status(400).json({ error: 'User does not exist' })
-
-  if(user._id.toString() !== blog.user.id.toString()) {
-    return res.status(401).json({ error: 'Not authorized to do that', user: user._id, blogUser: blog.user.id })
+  if (!user || blog.user.toString() !== user.id.toString()) {
+    return res.status(401).json({ error: 'operation not permited' })
   }
 
-  await Blog.findByIdAndRemove(id)
+  user.blogs = user.blogs.filter(b => b.toString() !== blog.id.toString())
+
+  await user.save()
+  await blog.remove()
 
   res.status(204).end()
 })
