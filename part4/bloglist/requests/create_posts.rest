@@ -1,5 +1,6 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imxyb2JlcnQiLCJpZCI6IjY0MGIzMzJhNjgzNTNkNDkzZDI3ODZjYSIsImlhdCI6MTY3ODQ2MzY1NH0.sGbRn6Y2KZlouGgD6r7LjI_RkcKUUi1bWC0JHFA1-ZA
 
 {
   "title": "Blog con token1",

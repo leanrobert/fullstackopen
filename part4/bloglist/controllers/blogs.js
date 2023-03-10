@@ -11,11 +11,7 @@ blogRouter.get('/', async (req, res) => {
 blogRouter.post('/', async (req, res) => {
   if(!req.body.title || !req.body.author) return res.status(400).json({ error: "Missing information, pass title, author and url"})
 
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
-
-  if(!decodedToken.id) return res.status(401).json({ error: 'Token invalid' })
-
-  const user = await User.findById(decodedToken.id)
+  const user = req.user
 
   const blog = new Blog({
     title: req.body.title,
@@ -47,11 +43,9 @@ blogRouter.put('/:id', async (req, res) => {
 
 blogRouter.delete('/:id', async (req, res) => {
   const { id } = req.params
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
 
-  if(!decodedToken.id) return res.status(401).json({ error: 'Token invalid' })
+  const user = req.user
 
-  const user = await User.findById(decodedToken.id)
   const blog = await Blog.findById(id).populate('user', { id: 1 })
 
   if (!user) return res.status(400).json({ error: 'User does not exist' })
