@@ -1,23 +1,29 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 blogRouter.get('/', async (req, res) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
   res.json(blogs)
 })
 
 blogRouter.post('/', async (req, res) => {
   if(!req.body.title || !req.body.author) return res.status(400).json({ error: "Missing information, pass title, author and url"})
 
+  const user = await User.findById(req.body.userId)
+
   const blog = new Blog({
     title: req.body.title,
     author: req.body.author,
     url: req.body.url,
-    likes: req.body.likes || 0
+    likes: req.body.likes || 0,
+    user: user.id
   })
 
-  await blog.save()
-  res.status(201).json(blog)
+  const newBlog = await blog.save()
+  user.blogs = user.blogs.concat(newBlog._id)
+  await user.save()
+  res.status(201).json(newBlog)
 })
 
 blogRouter.put('/:id', async (req, res) => {
