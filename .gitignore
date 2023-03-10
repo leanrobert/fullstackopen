@@ -7,3 +7,5 @@ part*/*/.env
 part*/*/*/.env
 
 notesapp
+personal
+program.md
