@@ -90,7 +90,7 @@ describe('posters', () => {
 
     const titles = blogsAtEnd.map(r => r.title)
 
-    expect(titles).toContain('Valid blog post')
+    expect(titles).toContain('Valid blog post ')
   }, 100000)
 
   test('blog without title is not added', async () => {
