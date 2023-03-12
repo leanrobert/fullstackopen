@@ -76,8 +76,6 @@ const App = () => {
     }
   } 
   
-
-
   return (
     <div>
       {user ? (
