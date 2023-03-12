@@ -1,15 +1,15 @@
 import React from 'react'
 
-const Login = ({ username, password, handleLogin, setUsername, setPassword }) => {
+const Login = ({ user, pass, handleLogin, setUserN, setPass }) => {
   return (
     <form onSubmit={handleLogin}>
       <div>
         username
-        <input type="text" value={username} name="Username" onChange={setUsername} />
+        <input type="text" value={user} name="Username" onChange={setUserN} />
       </div>
       <div>
         password
-        <input type="password" value={password} name="Password" onChange={setPassword} />
+        <input type="password" value={pass} name="Password" onChange={setPass} />
       </div>
       <button type="submit">log in</button>
     </form >
