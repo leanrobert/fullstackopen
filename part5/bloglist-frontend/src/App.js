@@ -62,7 +62,23 @@ const App = () => {
     } catch (error) {
       console.log('Error creating blog', error);
     }
-  } 
+  }
+  
+  const handleLike = async blog => {
+    try {
+      const updatedBlog = {
+        user: blog.user.id,
+        likes: blog.likes + 1,
+        author: blog.author,
+        title: blog.title,
+        url: blog.url      
+      }
+
+      await blogService.update(updatedBlog, blog.id)
+    } catch (error) {
+      console.log('Error updating likes', error);
+    }
+  }
   
   return (
     <div>
@@ -77,7 +93,7 @@ const App = () => {
           <CreateBlog createBlog={handleCreateBlog} />
         </Togglable>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog)} />
         )}
       </div>
       ) : (
