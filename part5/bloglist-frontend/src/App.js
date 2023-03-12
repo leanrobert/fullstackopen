@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import CreateBlog from './components/CreateBlog'
 import Login from './components/Login'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -13,6 +15,7 @@ const App = () => {
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
   const [message, setMessage] = useState("")
+  const [formVisible, setFormVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -71,7 +74,9 @@ const App = () => {
       setAuthor('')
       setUrl('')
     }
-  }
+  } 
+  
+
 
   return (
     <div>
@@ -82,21 +87,9 @@ const App = () => {
         <p>{`${user.name} logged in`} </p>
         <button onClick={handleLogout}>logout</button>
         <h2>create new</h2>
-        <form onSubmit={handleCreateBlog}>
-          <div>
-            title:
-            <input type="text" name="Title" value={title} onChange={e => setTitle(e.target.value)} />
-          </div>
-          <div>
-            author:
-            <input type="text" name="Author" value={author} onChange={e => setAuthor(e.target.value)} />
-          </div>
-          <div>
-            url:
-            <input type="text" name="Url" value={url} onChange={e => setUrl(e.target.value)} />
-          </div>
-          <button type="submit">create</button>
-        </form>
+        <Togglable buttonLabel='create a blog'>
+          <CreateBlog title={title} author={author} url={url} setA={e => setAuthor(e.target.value)} setT={e => setTitle(e.target.value)} setU={e => setUrl(e.target.value)} handleCreateBlog={handleCreateBlog} />
+        </Togglable>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
