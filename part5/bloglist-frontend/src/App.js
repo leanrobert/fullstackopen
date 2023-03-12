@@ -12,6 +12,7 @@ const App = () => {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
+  const [message, setMessage] = useState("")
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -38,7 +39,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      console.log('Wrong credentials', error);
+      setMessage('Wrong username or password')
+      setTimeout(() => {
+        setMessage('')
+      }, 3000)
       setUsername('')
       setPassword('')
     }
@@ -54,6 +58,10 @@ const App = () => {
 
     try {
       await blogService.create({ title, author, url })
+      setMessage(`A new blog ${title} by ${author} added`)
+      setTimeout(() => {
+        setMessage('')
+      }, 3000)
       setTitle('')
       setAuthor('')
       setUrl('')
@@ -70,6 +78,7 @@ const App = () => {
       {user ? (
       <div>
         <h2>blogs</h2>
+        {message && <p style={{ backgroundColor: "lightgray", color: "green", border: "1px solid green" }}>{message}</p>}
         <p>{`${user.name} logged in`} </p>
         <button onClick={handleLogout}>logout</button>
         <h2>create new</h2>
@@ -95,6 +104,7 @@ const App = () => {
       ) : (
         <div>
           <h2>log in to application</h2>
+          {message && <p style={{ backgroundColor: "lightgray", color: "red", border: "1px solid red" }}>{message}</p>}
           <Login user={username} pass={password} setPass={e => setPassword(e.target.value)} setUserN={e => setUsername(e.target.value)} handleLogin={handleLogin} />
         </div>
       )}
