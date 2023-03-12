@@ -15,8 +15,6 @@ const Blog = ({blog}) => {
     setVisible(!visible)
   }
 
-  console.log(blog)
-  
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author} 
