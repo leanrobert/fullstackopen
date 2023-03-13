@@ -15,9 +15,9 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [blogs])
+      setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
+    )
+  }, [])
 
   useEffect(() => {
     const loggedUserjson = window.localStorage.getItem('loggedBlogAppUser')
@@ -63,23 +63,15 @@ const App = () => {
       console.log('Error creating blog', error);
     }
   }
-  
-  const handleLike = async blog => {
-    try {
-      const updatedBlog = {
-        user: blog.user.id,
-        likes: blog.likes + 1,
-        author: blog.author,
-        title: blog.title,
-        url: blog.url      
-      }
 
-      await blogService.update(updatedBlog, blog.id)
+  const handleLike = async (blog, id) => {
+    try {
+      await blogService.update(blog, id)
     } catch (error) {
       console.log('Error updating likes', error);
     }
   }
-  
+
   return (
     <div>
       {user ? (
@@ -93,7 +85,7 @@ const App = () => {
           <CreateBlog createBlog={handleCreateBlog} />
         </Togglable>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog)} />
+          <Blog key={blog.id} blog={blog} updateBlog={handleLike} />
         )}
       </div>
       ) : (
@@ -104,7 +96,7 @@ const App = () => {
         </div>
       )}
     </div>
-  )   
+  )
 }
 
 export default App
