@@ -12,7 +12,7 @@ const Login = ({ user, pass, handleLogin, setUserN, setPass }) => {
         password
         <input type="password" value={pass} name="Password" onChange={setPass} />
       </div>
-      <button type="submit">log in</button>
+      <button type="submit" id="login">log in</button>
     </form >
   )
 }

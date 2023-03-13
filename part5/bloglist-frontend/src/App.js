@@ -101,7 +101,7 @@ const App = () => {
       ) : (
         <div>
           <h2>log in to application</h2>
-          {message && <p style={{ backgroundColor: 'lightgray', color: 'red', border: '1px solid red' }}>{message}</p>}
+          {message && <p className='error' style={{ backgroundColor: 'lightgray', color: 'red', border: '1px solid red' }}>{message}</p>}
           <Login user={username} pass={password} setPass={e => setPassword(e.target.value)} setUserN={e => setUsername(e.target.value)} handleLogin={handleLogin} />
         </div>
       )}
