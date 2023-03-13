@@ -72,6 +72,14 @@ const App = () => {
     }
   }
 
+  const handleDelete = async id => {
+    try {
+      await blogService.deleteB(id)
+    } catch (error) {
+      console.log('Error deleting post', error);
+    }
+  }
+
   return (
     <div>
       {user ? (
@@ -85,7 +93,7 @@ const App = () => {
           <CreateBlog createBlog={handleCreateBlog} />
         </Togglable>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={handleLike} />
+          <Blog key={blog.id} blog={blog} updateBlog={handleLike} removeBlog={handleDelete} />
         )}
       </div>
       ) : (
