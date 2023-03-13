@@ -9,9 +9,9 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [message, setMessage] = useState("")
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -60,7 +60,7 @@ const App = () => {
         setMessage('')
       }, 3000)
     } catch (error) {
-      console.log('Error creating blog', error);
+      console.log('Error creating blog', error)
     }
   }
 
@@ -68,7 +68,7 @@ const App = () => {
     try {
       await blogService.update(blog, id)
     } catch (error) {
-      console.log('Error updating likes', error);
+      console.log('Error updating likes', error)
     }
   }
 
@@ -78,30 +78,30 @@ const App = () => {
         await blogService.deleteB(blog.id)
       }
     } catch (error) {
-      console.log('Error deleting post', error);
+      console.log('Error deleting post', error)
     }
   }
 
   return (
     <div>
       {user ? (
-      <div>
-        <h2>blogs</h2>
-        {message && <p style={{ backgroundColor: "lightgray", color: "green", border: "1px solid green" }}>{message}</p>}
-        <p>{`${user.name} logged in`} </p>
-        <button onClick={handleLogout}>logout</button>
-        <h2>create new</h2>
-        <Togglable buttonLabel='create a blog'>
-          <CreateBlog createBlog={handleCreateBlog} />
-        </Togglable>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={handleLike} removeBlog={handleDelete} />
-        )}
-      </div>
+        <div>
+          <h2>blogs</h2>
+          {message && <p style={{ backgroundColor: 'lightgray', color: 'green', border: '1px solid green' }}>{message}</p>}
+          <p>{`${user.name} logged in`} </p>
+          <button onClick={handleLogout}>logout</button>
+          <h2>create new</h2>
+          <Togglable buttonLabel='create a blog'>
+            <CreateBlog createBlog={handleCreateBlog} />
+          </Togglable>
+          {blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} updateBlog={handleLike} removeBlog={handleDelete} />
+          )}
+        </div>
       ) : (
         <div>
           <h2>log in to application</h2>
-          {message && <p style={{ backgroundColor: "lightgray", color: "red", border: "1px solid red" }}>{message}</p>}
+          {message && <p style={{ backgroundColor: 'lightgray', color: 'red', border: '1px solid red' }}>{message}</p>}
           <Login user={username} pass={password} setPass={e => setPassword(e.target.value)} setUserN={e => setUsername(e.target.value)} handleLogin={handleLogin} />
         </div>
       )}
