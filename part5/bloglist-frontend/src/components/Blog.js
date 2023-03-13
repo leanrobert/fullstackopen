@@ -26,7 +26,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   }
 
   const deleteBlog = () => {
-    removeBlog(blog.id)
+    removeBlog(blog)
   }
 
   return (
