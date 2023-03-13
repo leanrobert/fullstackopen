@@ -35,7 +35,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
       <span className='title-author'>{blog.title} {blog.author}</span>
       <button onClick={toggleVisibility} className='button'>{visible ? 'hide' : 'view'}</button>
       {visible && (
-        <div>
+        <div className='notshowed'>
           {blog.url} <br />
           likes {blog.likes}<button onClick={likeBlog}>like</button> <br />
           {blog.user.name} <br />
