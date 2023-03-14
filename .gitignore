@@ -6,6 +6,8 @@ part*/.env
 part*/*/.env
 part*/*/*/.env
 
+part6-theory
+
 notesapp
 personal
 program.md
