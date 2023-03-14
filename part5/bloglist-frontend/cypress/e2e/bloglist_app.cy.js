@@ -32,19 +32,35 @@ describe('Bloglist app', () => {
     })
   })
 
-  describe('When logged in', function() {
-    beforeEach(function() {
+  /* describe('When logged in', function() {
+    it('A blog can be created', function() {
       cy.get('input:first').type('lrobert')
       cy.get('input:last').type('lean1234')
       cy.get('#login').click()
-    })
-
-    it('A blog can be created', function() {
       cy.contains('create a blog').click()
       cy.get('input[name="Title"]').type('titulo')
       cy.get('input[name="Author"]').type('autor')
       cy.get('input[name="Url"]').type('url.com')
-      cy.contains('create').click()
+      cy.get('.create-button').click()
+    })
+  }) */
+
+  describe('With a created blog', function() {
+    beforeEach(function() {
+      cy.get('input:first').type('lrobert')
+      cy.get('input:last').type('lean1234')
+      cy.get('#login').click()
+      cy.contains('create a blog').click()
+      cy.get('input[name="Title"]').type('titulo2')
+      cy.get('input[name="Author"]').type('autor2')
+      cy.get('input[name="Url"]').type('url2.com')
+      cy.get('.create-button').click()
+    })
+
+    it('A blog can be liked', function() {
+      cy.contains('view').click()
+      cy.get('.like-button').click()
+      cy.get('likes 1')
     })
   })
 })

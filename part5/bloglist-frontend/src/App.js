@@ -55,6 +55,8 @@ const App = () => {
   const handleCreateBlog = async blogObj => {
     try {
       await blogService.create(blogObj)
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
       setMessage(`A new blog ${blogObj.title} by ${blogObj.author} added`)
       setTimeout(() => {
         setMessage('')
@@ -67,6 +69,8 @@ const App = () => {
   const handleLike = async (blog, id) => {
     try {
       await blogService.update(blog, id)
+      const blogs = await blogService.getAll()
+      setBlogs(blogs.sort((a, b) => b.likes - a.likes))
     } catch (error) {
       console.log('Error updating likes', error)
     }
@@ -76,6 +80,8 @@ const App = () => {
     try {
       if (window.confirm(`Removing blog ${blog.title} by ${blog.author}`)) {
         await blogService.deleteB(blog.id)
+        const blogs = await blogService.getAll()
+        setBlogs(blogs)
       }
     } catch (error) {
       console.log('Error deleting post', error)
