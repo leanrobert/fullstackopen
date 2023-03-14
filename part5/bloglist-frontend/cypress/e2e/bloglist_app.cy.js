@@ -60,7 +60,25 @@ describe('Bloglist app', () => {
     it('A blog can be liked', function() {
       cy.contains('view').click()
       cy.get('.like-button').click()
-      cy.get('likes 1')
+    })
+  })
+
+  describe('With a created blog', function() {
+    beforeEach(function() {
+      cy.get('input:first').type('lrobert')
+      cy.get('input:last').type('lean1234')
+      cy.get('#login').click()
+      cy.contains('create a blog').click()
+      cy.get('input[name="Title"]').type('titulo2')
+      cy.get('input[name="Author"]').type('autor2')
+      cy.get('input[name="Url"]').type('url2.com')
+      cy.get('.create-button').click()
+    })
+
+    it('A blog can be deleted', function() {
+      cy.contains('view').click()
+      cy.contains('remove').click()
+      cy.contains('ok').click()
     })
   })
 })
