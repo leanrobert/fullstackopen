@@ -23,6 +23,9 @@ const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
   switch(action.type) {
+    case 'ADD': {
+      return state.concat(action.payload)
+    }
     case 'VOTE': {
       const id = action.payload.id
       const anecdoteToVote = state.find(n => n.id === id)
@@ -35,6 +38,17 @@ const reducer = (state = initialState, action) => {
     }
     default:
       return state
+  }
+}
+
+export const createAnecdote = content => {
+  return {
+    type: 'ADD',
+    payload: {
+      content,
+      id: getId(),
+      votes: 0
+    }
   }
 }
 
