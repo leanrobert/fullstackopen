@@ -6,11 +6,11 @@ const Login = ({ user, pass, handleLogin, setUserN, setPass }) => {
     <form onSubmit={handleLogin}>
       <div>
         username
-        <input type="text" value={user} name="Username" onChange={setUserN} />
+        <input id="username" type="text" value={user} name="Username" onChange={setUserN} />
       </div>
       <div>
         password
-        <input type="password" value={pass} name="Password" onChange={setPass} />
+        <input id="password" type="password" value={pass} name="Password" onChange={setPass} />
       </div>
       <button type="submit" id="login">log in</button>
     </form >

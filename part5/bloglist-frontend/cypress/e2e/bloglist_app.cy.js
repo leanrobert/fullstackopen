@@ -78,7 +78,6 @@ describe('Bloglist app', () => {
     it('A blog can be deleted', function() {
       cy.contains('view').click()
       cy.contains('remove').click()
-      cy.contains('ok').click()
     })
   })
 })
