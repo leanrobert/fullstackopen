@@ -6,9 +6,12 @@ const notificationSlice = createSlice({
   reducers: {
     notificate(state, action) {
       return state = action.payload
+    },
+    reset(state, action) {
+      return state = ''
     }
   }
 })
 
-export const { notificate } = notificationSlice.actions
+export const { notificate, reset } = notificationSlice.actions
 export default notificationSlice.reducer
