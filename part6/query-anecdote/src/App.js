@@ -24,7 +24,7 @@ const App = () => {
       <Notification />
       <AnecdoteForm />
 
-      {anecdotes.map(anecdote =>
+      {anecdotes?.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
