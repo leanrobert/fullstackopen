@@ -26,7 +26,6 @@ const Notes = () => {
   })
 
   const handleClick = async note => {
-    console.log(note);
     await noteService.makeImportant(note.id)
     dispatch(toggleImportanceOf(note.id))
   }
