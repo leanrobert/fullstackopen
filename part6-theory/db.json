@@ -12,8 +12,13 @@
     },
     {
       "content": "pepe",
-      "important": false,
+      "important": true,
       "id": 3
+    },
+    {
+      "content": "pepito",
+      "important": true,
+      "id": 4
     }
   ]
 }
