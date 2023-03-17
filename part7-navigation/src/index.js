@@ -8,7 +8,6 @@ import {
   Route,
   Link,
   Navigate,
-  useParams,
   useNavigate,
 } from "react-router-dom"
 
@@ -112,6 +111,7 @@ const App = () => {
   }
 
   const match = useMatch('/notes/:id')
+
   const note = match
     ? notes.find(note => note.id === Number(match.params.id))
     : null
