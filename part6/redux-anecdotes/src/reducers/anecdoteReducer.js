@@ -43,7 +43,6 @@ export const voteAnecdote = anecdote => {
       votes: anecdote.votes + 1
     }
     const anec = await anecdoteService.vote(changedAnecdote)
-    console.log(anec);
     dispatch(voteAnec(anec))
   }
 }
