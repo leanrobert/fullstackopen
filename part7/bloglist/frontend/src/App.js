@@ -2,16 +2,16 @@ import { useEffect, useRef } from 'react';
 
 import LoginForm from './components/Login';
 import Notification from './components/Notification';
-import userServices from './services/user'
 
 import { setNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlogRed, deleteBlog, initializeBlogs, voteBlog } from './reducers/blogsReducers';
 import { getUser, loginUser, logoutUser } from './reducers/userReducer';
-import { Route, Routes } from 'react-router-dom';
-import UserData from './components/UserData';
+import { Route, Routes, useMatch } from 'react-router-dom';
+import UsersData from './components/UsersData';
 import CreationPage from './components/CreationPage';
 import { initializeUsers } from './reducers/usersReducer';
+import UserDetail from './components/UserDetail';
 
 const App = () => {
   const dispatch = useDispatch()
@@ -19,6 +19,7 @@ const App = () => {
   const user = useSelector(({ user }) => user)
   const info = useSelector(({ notification }) => notification)
   const blogs = useSelector(({ blogs }) => blogs)
+  const users = useSelector(({ users }) => users)
 
   const blogFormRef = useRef();
 
@@ -73,6 +74,12 @@ const App = () => {
     }
   };
 
+  const match = useMatch('/users/:id')
+
+  const userFiltered = match
+    ? users.find(user => user.id === match.params.id)
+    : null
+
   if (!user) {
     return (
       <div>
@@ -92,7 +99,8 @@ const App = () => {
         <button onClick={logout}>logout</button>
       </div>
       <Routes>
-        <Route path="/users" element={<UserData />} />
+        <Route path="/users/:id" element={<UserDetail user={userFiltered} />} />
+        <Route path="/users" element={<UsersData users={users} />} />
         <Route path="/" element={<CreationPage blogFormRef={blogFormRef} createBlog={createBlog} blogs={blogs} like={like} user={user} remove={remove} />} />
       </Routes>
     </div>

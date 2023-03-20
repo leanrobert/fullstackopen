@@ -25,6 +25,11 @@ router.post('/', async (request, response) => {
   response.status(201).json(savedUser)
 })
 
+router.get('/:id', async (req, res) => {
+  const user = await User.findById({ _id: req.params.id }).populate('blogs', { title: 1, author: 1, url: 1, likes: 1 })
+  res.json(user)
+})
+
 router.get('/', async (request, response) => {
   const users = await User.find({})
     .populate('blogs', { title: 1, author: 1, url: 1, likes: 1 })

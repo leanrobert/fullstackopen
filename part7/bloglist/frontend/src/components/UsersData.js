@@ -1,9 +1,7 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-const UserData = () => {
-  const users = useSelector(({ users }) => users)
-
+const UsersData = ({ users }) => {
   return (
     <div>
       <h2>Users</h2>
@@ -15,7 +13,8 @@ const UserData = () => {
           </tr>
           {users.map(user => (
             <tr key={user.id}>
-              <td>{user.name}</td>
+              <td>
+                <Link to={`/users/${user.id}`}>{user.name}</Link></td>
               <td>{user.blogs.length}</td>
             </tr>
           ))}
@@ -25,4 +24,4 @@ const UserData = () => {
   )
 }
 
-export default UserData
+export default UsersData
