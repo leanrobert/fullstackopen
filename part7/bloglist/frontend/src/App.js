@@ -1,18 +1,23 @@
-import { useState, useEffect, useRef } from "react";
-import Blog from "./components/Blog";
-import blogService from "./services/blogs";
-import loginService from "./services/login";
-import storageService from "./services/storage";
+import { useState, useEffect, useRef } from 'react';
+import Blog from './components/Blog';
+import blogService from './services/blogs';
+import loginService from './services/login';
+import storageService from './services/storage';
 
-import LoginForm from "./components/Login";
-import NewBlog from "./components/NewBlog";
-import Notification from "./components/Notification";
-import Togglable from "./components/Togglable";
+import LoginForm from './components/Login';
+import NewBlog from './components/NewBlog';
+import Notification from './components/Notification';
+import Togglable from './components/Togglable';
+
+import { setNotification } from './reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 const App = () => {
+  const dispatch = useDispatch()
+
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState("");
-  const [info, setInfo] = useState({ message: null });
+  const info = useSelector(({ notification }) => notification)
 
   const blogFormRef = useRef();
 
@@ -25,15 +30,8 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
-  const notifyWith = (message, type = "info") => {
-    setInfo({
-      message,
-      type,
-    });
-
-    setTimeout(() => {
-      setInfo({ message: null });
-    }, 3000);
+  const notifyWith = (message, type = 'info') => {
+    dispatch(setNotification({ message, type }))
   };
 
   const login = async (username, password) => {
@@ -41,16 +39,16 @@ const App = () => {
       const user = await loginService.login({ username, password });
       setUser(user);
       storageService.saveUser(user);
-      notifyWith("welcome!");
+      notifyWith('welcome!');
     } catch (e) {
-      notifyWith("wrong username or password", "error");
+      notifyWith('wrong username or password', 'error');
     }
   };
 
   const logout = async () => {
     setUser(null);
     storageService.removeUser();
-    notifyWith("logged out");
+    notifyWith('logged out');
   };
 
   const createBlog = async (newBlog) => {
@@ -93,12 +91,12 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification info={info} />
+      <Notification />
       <div>
         {user.name} logged in
         <button onClick={logout}>logout</button>
       </div>
-      <Togglable buttonLabel="new note" ref={blogFormRef}>
+      <Togglable buttonLabel='new note' ref={blogFormRef}>
         <NewBlog createBlog={createBlog} />
       </Togglable>
       <div>
