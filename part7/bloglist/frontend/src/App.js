@@ -1,15 +1,17 @@
 import { useEffect, useRef } from 'react';
-import Blog from './components/Blog';
 
 import LoginForm from './components/Login';
-import NewBlog from './components/NewBlog';
 import Notification from './components/Notification';
-import Togglable from './components/Togglable';
+import userServices from './services/user'
 
 import { setNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlogRed, deleteBlog, initializeBlogs, voteBlog } from './reducers/blogsReducers';
-import { loginUser, logoutUser } from './reducers/userReducer';
+import { getUser, loginUser, logoutUser } from './reducers/userReducer';
+import { Route, Routes } from 'react-router-dom';
+import UserData from './components/UserData';
+import CreationPage from './components/CreationPage';
+import { initializeUsers } from './reducers/usersReducer';
 
 const App = () => {
   const dispatch = useDispatch()
@@ -19,6 +21,14 @@ const App = () => {
   const blogs = useSelector(({ blogs }) => blogs)
 
   const blogFormRef = useRef();
+
+  useEffect(() => {
+    dispatch(initializeUsers())
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(getUser())
+  }, [dispatch])
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -81,20 +91,10 @@ const App = () => {
         {user.name} logged in
         <button onClick={logout}>logout</button>
       </div>
-      <Togglable buttonLabel='new note' ref={blogFormRef}>
-        <NewBlog createBlog={createBlog} />
-      </Togglable>
-      <div>
-        {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            like={() => like(blog)}
-            canRemove={user && blog.user?.username === user.username}
-            remove={() => remove(blog)}
-          />
-        ))}
-      </div>
+      <Routes>
+        <Route path="/users" element={<UserData />} />
+        <Route path="/" element={<CreationPage blogFormRef={blogFormRef} createBlog={createBlog} blogs={blogs} like={like} user={user} remove={remove} />} />
+      </Routes>
     </div>
   );
 };

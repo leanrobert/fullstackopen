@@ -32,4 +32,11 @@ export const logoutUser = () => {
   }
 }
 
+export const getUser = () => {
+  return async dispatch => {
+    const user = storageService.loadUser()
+    dispatch(login(user))
+  }
+}
+
 export default userSlice.reducer
