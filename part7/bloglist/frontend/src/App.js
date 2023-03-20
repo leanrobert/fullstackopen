@@ -1,7 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Blog from './components/Blog';
-import loginService from './services/login';
-import storageService from './services/storage';
 
 import LoginForm from './components/Login';
 import NewBlog from './components/NewBlog';
@@ -11,20 +9,16 @@ import Togglable from './components/Togglable';
 import { setNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlogRed, deleteBlog, initializeBlogs, voteBlog } from './reducers/blogsReducers';
+import { loginUser, logoutUser } from './reducers/userReducer';
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const [user, setUser] = useState("");
+  const user = useSelector(({ user }) => user)
   const info = useSelector(({ notification }) => notification)
   const blogs = useSelector(({ blogs }) => blogs)
 
   const blogFormRef = useRef();
-
-  useEffect(() => {
-    const user = storageService.loadUser();
-    setUser(user);
-  }, []);
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -36,9 +30,7 @@ const App = () => {
 
   const login = async (username, password) => {
     try {
-      const user = await loginService.login({ username, password });
-      setUser(user);
-      storageService.saveUser(user);
+      dispatch(loginUser(username, password))
       notifyWith('welcome!');
     } catch (e) {
       notifyWith('wrong username or password', 'error');
@@ -46,8 +38,7 @@ const App = () => {
   };
 
   const logout = async () => {
-    setUser(null);
-    storageService.removeUser();
+    dispatch(logoutUser())
     notifyWith('logged out');
   };
 
