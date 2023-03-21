@@ -12,6 +12,7 @@ const blogsSlice = createSlice({
       state.push(action.payload)
     },
     vote(state, action) {
+      console.log(action.payload);
       const id = action.payload.id
       return state.map(blog => blog.id !== id ? blog : action.payload)
     },
@@ -54,6 +55,14 @@ export const deleteBlog = blog => {
   return async dispatch => {
     await blogService.remove(blog.id);
     dispatch(remove(blog))
+  }
+}
+
+export const commentBlog = (id, comment) => {
+  return async dispatch => {
+    await blogService.comment(id, comment)
+    const blog = await blogService.getOne(id)
+    dispatch(vote(blog))
   }
 }
 
