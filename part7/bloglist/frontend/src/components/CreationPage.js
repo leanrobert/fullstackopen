@@ -1,9 +1,15 @@
 import React from 'react'
 import Togglable from './Togglable'
 import NewBlog from './NewBlog';
-import Blog from './Blog';
+import { Link } from 'react-router-dom';
 
 const CreationPage = ({ blogFormRef, createBlog, blogs, like, user, remove }) => {
+  const style = {
+    border: "1px solid black",
+    padding: "10px",
+    margin: "2px"
+  }
+
   return (
     <div>
       <Togglable buttonLabel='new note' ref={blogFormRef}>
@@ -11,13 +17,9 @@ const CreationPage = ({ blogFormRef, createBlog, blogs, like, user, remove }) =>
       </Togglable>
       <div>
         {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            like={() => like(blog)}
-            canRemove={user && blog.user?.username === user.username}
-            remove={() => remove(blog)}
-          />
+          <div style={style} key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </div>
         ))}
       </div>
     </div>

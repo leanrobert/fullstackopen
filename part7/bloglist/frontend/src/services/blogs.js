@@ -13,6 +13,11 @@ const getAll = async () => {
   return request.data;
 };
 
+const getOne = async (id) => {
+  const res = await axios.get(`${baseUrl}/${id}`)
+  return res.data
+}
+
 const create = async (object) => {
   const request = await axios.post(baseUrl, object, { headers });
   return request.data;
@@ -29,4 +34,4 @@ const remove = async (id) => {
   await axios.delete(`${baseUrl}/${id}`, { headers });
 };
 
-export default { getAll, create, update, remove };
+export default { getAll, getOne, create, update, remove };

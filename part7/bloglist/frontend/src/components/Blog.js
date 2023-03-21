@@ -1,34 +1,27 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
-const Blog = ({ blog, like, canRemove, remove }) => {
-  const [visible, setVisible] = useState(false);
+const Blog = ({ blog, like, remove }) => {
+  const user = useSelector(({ user }) =>  user)
 
-  const style = {
-    marginBottom: 2,
-    padding: 5,
-    borderStyle: "solid",
-  };
+  if(!blog) {
+    return null
+  }
 
   return (
-    <div style={style} className="blog">
-      {blog.title} {blog.author}
-      <button onClick={() => setVisible(!visible)}>
-        {visible ? "hide" : "show"}
-      </button>
-      {visible && (
+    <div className="blog">
+      <h2>{blog.title}</h2>
+      <div>
         <div>
-          <div>
-            {" "}
-            <a href={blog.url}> {blog.url}</a>{" "}
-          </div>
-          <div>
-            likes {blog.likes} <button onClick={like}>like</button>
-          </div>
-          <div>{blog.user && blog.user.name}</div>
-          {canRemove && <button onClick={remove}>delete</button>}
+          {" "}
+          <a href={blog.url}> {blog.url}</a>{" "}
         </div>
-      )}
+        <div>
+        {blog.likes} likes <button onClick={like}>like</button>
+        </div>
+        <div>{blog.user && `added by ${blog.user.name}`}</div>
+        {blog.user.username === user.username && <button onClick={remove}>delete</button>}
+      </div>
     </div>
   );
 };

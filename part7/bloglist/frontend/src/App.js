@@ -12,6 +12,7 @@ import UsersData from './components/UsersData';
 import CreationPage from './components/CreationPage';
 import { initializeUsers } from './reducers/usersReducer';
 import UserDetail from './components/UserDetail';
+import Blog from './components/Blog';
 
 const App = () => {
   const dispatch = useDispatch()
@@ -74,10 +75,15 @@ const App = () => {
     }
   };
 
-  const match = useMatch('/users/:id')
+  const matchUser = useMatch('/users/:id')
+  const matchBlog = useMatch('/blogs/:id')
 
-  const userFiltered = match
-    ? users.find(user => user.id === match.params.id)
+  const userFiltered = matchUser
+    ? users.find(user => user.id === matchUser.params.id)
+    : null
+
+    const blogFiltered = matchBlog
+    ? blogs.find(blog => blog.id === matchBlog.params.id)
     : null
 
   if (!user) {
@@ -99,6 +105,13 @@ const App = () => {
         <button onClick={logout}>logout</button>
       </div>
       <Routes>
+        <Route path='/blogs/:id' element={
+          <Blog 
+            blog={blogFiltered} 
+            like={() => like(blogFiltered)} 
+            remove={() => remove(blogFiltered)} 
+          />
+        } />
         <Route path="/users/:id" element={<UserDetail user={userFiltered} />} />
         <Route path="/users" element={<UsersData users={users} />} />
         <Route path="/" element={<CreationPage blogFormRef={blogFormRef} createBlog={createBlog} blogs={blogs} like={like} user={user} remove={remove} />} />
