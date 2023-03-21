@@ -6,13 +6,14 @@ import Notification from './components/Notification';
 import { setNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlogRed, deleteBlog, initializeBlogs, voteBlog } from './reducers/blogsReducers';
-import { getUser, loginUser, logoutUser } from './reducers/userReducer';
+import { getUser, loginUser } from './reducers/userReducer';
 import { Route, Routes, useMatch } from 'react-router-dom';
 import UsersData from './components/UsersData';
 import CreationPage from './components/CreationPage';
 import { initializeUsers } from './reducers/usersReducer';
 import UserDetail from './components/UserDetail';
 import Blog from './components/Blog';
+import Menu from './components/Menu';
 
 const App = () => {
   const dispatch = useDispatch()
@@ -47,11 +48,6 @@ const App = () => {
     } catch (e) {
       notifyWith('wrong username or password', 'error');
     }
-  };
-
-  const logout = async () => {
-    dispatch(logoutUser())
-    notifyWith('logged out');
   };
 
   const createBlog = async (newBlog) => {
@@ -98,12 +94,9 @@ const App = () => {
 
   return (
     <div>
+      <Menu />
       <h2>blogs</h2>
       <Notification />
-      <div>
-        {user.name} logged in
-        <button onClick={logout}>logout</button>
-      </div>
       <Routes>
         <Route path='/blogs/:id' element={
           <Blog 
