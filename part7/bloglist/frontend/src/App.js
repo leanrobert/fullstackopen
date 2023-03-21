@@ -14,6 +14,7 @@ import { initializeUsers } from './reducers/usersReducer';
 import UserDetail from './components/UserDetail';
 import Blog from './components/Blog';
 import Menu from './components/Menu';
+import { Typography } from '@mui/material';
 
 const App = () => {
   const dispatch = useDispatch()
@@ -85,7 +86,7 @@ const App = () => {
   if (!user) {
     return (
       <div>
-        <h2>log in to application</h2>
+        <Typography variant='h3'>Log in</Typography>
         <Notification info={info} />
         <LoginForm login={login} />
       </div>
@@ -95,7 +96,6 @@ const App = () => {
   return (
     <div>
       <Menu />
-      <h2>blogs</h2>
       <Notification />
       <Routes>
         <Route path='/blogs/:id' element={

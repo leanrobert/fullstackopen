@@ -1,3 +1,4 @@
+import { Button, List, ListItem, TextField, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,33 +21,36 @@ const Blog = ({ blog, like, remove }) => {
 
   return (
     <div className="blog">
-      <h2>{blog.title}</h2>
+      <Typography variant="h4">{blog.title}</Typography>
       <div>
-        <div>
-          {" "}
-          <a href={blog.url}> {blog.url}</a>{" "}
-        </div>
-        <div>
-        {blog.likes} likes <button onClick={like}>like</button>
-        </div>
-        <div>{blog.user && `added by ${blog.user.name}`}</div>
-        <h3>comments</h3>
+        <Typography>
+          <a href={blog.url}> {blog.url}</a>
+        </Typography>
+        <Typography>
+        {blog.likes} likes <Button variant="outlined" size="small" onClick={like}>like</Button>
+        </Typography>
+        <Typography>{blog.user && `added by ${blog.user.name}`}</Typography>
+        <Typography variant="h4">comments</Typography>
         <form onSubmit={handleSubmit}>
-          <input
+          <TextField 
+            id="comment" 
+            label="Comment" 
             value={comment}
+            size="small"
             onChange={({ target }) => setComment(target.value)}
-            id="comment"
           />
-        <button id="create-butto" type="submit">
+        <Button sx={{ display: 'block' }} id="create-butto" type="submit">
           add comment
-        </button>
+        </Button>
       </form>
-        <ul>
+        <List dense={false}>
           {blog.comments.map((comm, i) => (
-            <li key={i}>{comm}</li>
+            <ListItem key={i}>
+              {comm}
+            </ListItem>
           ))}
-        </ul>
-        {blog.user.username === user.username && <button onClick={remove}>delete</button>}
+        </List>
+        {blog.user.username === user.username && <Button color="error" variant="outlined" onClick={remove}>delete</Button>}
       </div>
     </div>
   );

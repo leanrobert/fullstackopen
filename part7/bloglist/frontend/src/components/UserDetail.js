@@ -1,3 +1,4 @@
+import { Container, List, ListItem, Typography } from '@mui/material'
 import React from 'react'
 
 const UserDetail = ({ user }) => {
@@ -6,17 +7,17 @@ const UserDetail = ({ user }) => {
   }
 
   return (
-    <div>
-      <h2>{user.name}</h2>
-      <h3>added blogs</h3>
-      <ul>
+    <Container>
+      <Typography variant="h4">{user.name}</Typography>
+      <Typography variant='h6'>Added blogs</Typography>
+      <List>
         {user.blogs.map(blog => (
-          <li key={blog.id}>
-            {blog.title}
-          </li>
+          <ListItem key={blog.id}>
+            - {blog.title}
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Container>
   )
 }
 
