@@ -44,6 +44,17 @@ router.post('/', userExtractor, async (request, response) => {
   response.status(201).json(createdBlog)
 })
 
+router.post('/:id/comments', async (req, res) => {
+  const id = req.params.id
+  const comment = req.body.comment
+
+  const blog =  await Blog.findById(id)
+  blog.comments.push(comment)
+  await blog.save()
+
+  res.status(201).json(blog)
+})
+
 router.put('/:id', async (request, response) => {
   const { title, url, author, likes } = request.body
 

@@ -20,6 +20,12 @@ const Blog = ({ blog, like, remove }) => {
         {blog.likes} likes <button onClick={like}>like</button>
         </div>
         <div>{blog.user && `added by ${blog.user.name}`}</div>
+        <h3>comments</h3>
+        <ul>
+          {blog.comments.map((comm, i) => (
+            <li key={i}>{comm}</li>
+          ))}
+        </ul>
         {blog.user.username === user.username && <button onClick={remove}>delete</button>}
       </div>
     </div>
