@@ -157,9 +157,11 @@ const resolvers = {
       const authorswithBook = []
       books.map((book) => {
         if (!authorswithBook.find(author => author.name === book.author)) {
+          selectedAuthor = authors.find(author => author.name === book.author)
           authorswithBook.push({
-            name: book.author,
-            bookCount: books.filter(b => b.author === book.author).length
+            name: selectedAuthor.name,
+            bookCount: books.filter(b => b.author === book.author).length,
+            born: selectedAuthor.born ? selectedAuthor.born : null
           })
         }
       })
@@ -172,7 +174,7 @@ const resolvers = {
     addBook: (root, args) => {
       const book = { ...args, id: uuid() }
       if (!authors.find(author => author.name === args.author)) {
-        authors.concat({ name: args.name, born: null, bookCount: 1 })
+        authors.concat({ name: args.name, born: 0, bookCount: 1 })
       }
       books = books.concat(book)
       return book
@@ -180,7 +182,6 @@ const resolvers = {
 
     editAuthor: (root, args) => {
       const author = authors.find(a => a.name === args.name)
-      console.log(authors);
       if(!author) return null
 
       const updatedAuthor = { ...author, born: args.setBornTo }
