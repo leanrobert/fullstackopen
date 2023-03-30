@@ -41,7 +41,7 @@ const App = () => {
           <Authors show={page === 'authors'} authors={authors} />
           <Books show={page === 'books'} books={books} />
           <NewBook show={page === 'add'} />
-          {page === 'recommend' && <Recommendations show={page === 'recommend'} me={me} books={books} />}
+          {page === 'recommend' && <Recommendations show={page === 'recommend'} me={me} />}
         </>
       )}
     </div>
