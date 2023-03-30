@@ -67,7 +67,7 @@ const resolvers = {
     },
 
     allBooks: async (root, args) => {
-      let books = await Book.find({})
+      let books = await Book.find({}).populate('author')
 
       if(args.author) {
         books = books.filter(book => book.author === args.author)
@@ -82,15 +82,19 @@ const resolvers = {
 
     allAuthors: async () => {
       const authors = await Author.find({})
-      return authors
-    },
-  },
+      const books = await Book.find({}).populate('author')
 
-  Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({ author: root.name })
-      return books.length
-    }
+      return authors.map(author => {
+        const bookCount = books.reduce((a, book) => (book.author.name === author.name ? a + 1 : a), 0)
+
+        return {
+          name: author.name,
+          id: author._id,
+          born: author.born,
+          bookCount
+        }
+      })
+    },
   },
 
   Mutation: {
@@ -98,7 +102,7 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author })
 
       if (!author) {
-        author = new Author({ name: args.author, born: null })
+        author = new Author({ name: args.author })
 
         try {
           await author.save()
