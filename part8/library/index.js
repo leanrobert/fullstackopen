@@ -1,4 +1,4 @@
-const { ApolloServer } = require('@apollo/server')
+const { ApolloServer, gql } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v1: uuid } = require('uuid')
 
@@ -27,20 +27,6 @@ let authors = [
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
 ]
-
-/*
- * Suomi:
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
- *
- * English:
- * It might make more sense to associate a book with its author by storing the author's id in the context of the book instead of the author's name
- * However, for simplicity, we will store the author's name in connection with the book
- *
- * Spanish:
- * Podría tener más sentido asociar un libro con su autor almacenando la id del autor en el contexto del libro en lugar del nombre del autor
- * Sin embargo, por simplicidad, almacenaremos el nombre del autor en conección con el libro
-*/
 
 let books = [
   {
@@ -94,12 +80,9 @@ let books = [
   },
 ]
 
-/*
-  you can remove the placeholder query once your first own has been implemented
-*/
-
 const typeDefs = `
   type Author {
+    id: ID!
     name: String!
     bookCount: Int!
     born: Int
@@ -108,7 +91,7 @@ const typeDefs = `
   type Book {
     title: String!
     published: Int!
-    author: String
+    author: String!
     id: ID!
     genres: [String!]!
   }
@@ -140,53 +123,56 @@ const resolvers = {
     authorCount: () => authors.length,
 
     allBooks: (root, args) => {
-      let newBooks = books
+      let filteredBooks = books
 
       if(args.author) {
-        newBooks = newBooks.filter(book => book.author === args.author)
+        filteredBooks = filteredBooks.filter(book => book.author === args.author)
       }
 
       if(args.genre) {
-        return newBooks.filter(book => book.genres.find(gen => gen === args.genre))
+        filteredBooks = filteredBooks.filter(book => book.genres.includes(args.genre))
       }
 
-      return newBooks
+      return filteredBooks
     },
 
-    allAuthors: () => {
-      const authorswithBook = []
-      books.map((book) => {
-        if (!authorswithBook.find(author => author.name === book.author)) {
-          selectedAuthor = authors.find(author => author.name === book.author)
-          authorswithBook.push({
-            name: selectedAuthor.name,
-            bookCount: books.filter(b => b.author === book.author).length,
-            born: selectedAuthor.born ? selectedAuthor.born : null
-          })
-        }
-      })
+    allAuthors: (root) => authors
+  },
 
-      return authorswithBook
-    }
+  Author: {
+    bookCount: root => books.filter(book => book.author === root.name).length
   },
 
   Mutation: {
     addBook: (root, args) => {
-      const book = { ...args, id: uuid() }
       if (!authors.find(author => author.name === args.author)) {
-        authors.concat({ name: args.name, born: 0, bookCount: 1 })
+        authors = authors.concat({
+          name: args.author,
+          id: uuid(),
+          born: null
+        })
       }
-      books = books.concat(book)
-      return book
+
+      const newBook = {
+        ...args, id: uuid()
+      }
+
+      books = books.concat(newBook)
+      return newBook
     },
 
     editAuthor: (root, args) => {
-      const author = authors.find(a => a.name === args.name)
-      if(!author) return null
+      const author = authors.find(author => author.name === args.name)
+      if (!author) return null
 
-      const updatedAuthor = { ...author, born: args.setBornTo }
-      authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
-      return updatedAuthor
+      const newAuthor = {
+        ...author,
+        born: args.setBornTo
+      }
+
+      authors = authors.map(author => author.name === args.name ? newAuthor : author)
+
+      return newAuthor
     }
   }
 }
