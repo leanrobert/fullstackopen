@@ -44,7 +44,7 @@ const App = () => {
 
       <NewBook show={page === 'add'} />
 
-      {!token && <Login show={page === 'login'} setToken={setToken} setPage={setPage} />}
+      {!token && page === 'login' && <Login show={page === 'login'} setToken={setToken} setPage={setPage} />}
     </div>
   )
 }
