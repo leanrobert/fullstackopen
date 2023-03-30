@@ -115,6 +115,8 @@ const resolvers = {
         }
       })
     },
+
+    me: (root, args, { currentUser}) => { return currentUser }
   },
 
   Mutation: {
