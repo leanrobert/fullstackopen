@@ -1,14 +1,28 @@
-interface TargetExercise {
-  periodLength: number;
-  trainingDays: number;
+interface ArgsFormat {
+  days: number[];
   target: number;
-  average: number;
-  success: boolean;
-  rating: 1 | 2 | 3;
-  ratingDescription: string;
 }
 
-const calculateExercises = (days : number[], target: number): TargetExercise => {
+const parseArguments = (args: string[]): ArgsFormat => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+
+  const usefullArgs = args.splice(0, 2)
+
+  const values = args.map(arg => {
+    if (isNaN(Number(arg))) {
+      throw new Error('Provided values were not numbers');
+    }
+
+    return Number(arg)
+  })
+
+  return {
+    target: values.pop(),
+    days: values
+  }
+}
+
+const calculateExercises = (days : number[], target: number) => {
   const average = days.reduce((partial, a) => partial + a, 0) / days.length
   let rating: 1 | 2 | 3;
   let ratingDescription: string;
@@ -24,7 +38,7 @@ const calculateExercises = (days : number[], target: number): TargetExercise => 
     ratingDescription = 'Excelent work!'
   }
 
-  return {
+  console.log({
     periodLength: days.length,
     trainingDays: days.filter(val => val !== 0).length,
     target,
@@ -32,7 +46,16 @@ const calculateExercises = (days : number[], target: number): TargetExercise => 
     success: target === average,
     rating,
     ratingDescription
-  }
+  });
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const { days, target } = parseArguments(process.argv)
+  calculateExercises(days, target)
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happened.';
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  }
+  console.log(errorMessage);
+}
