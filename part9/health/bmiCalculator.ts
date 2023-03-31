@@ -22,4 +22,4 @@ export const calculateBmi = (height: number, weight: number): string => {
   } else {
     throw new Error('Provided values were not numbers');
   }
-}
+};
