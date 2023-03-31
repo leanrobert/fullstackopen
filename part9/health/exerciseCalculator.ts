@@ -1,13 +1,4 @@
-interface ArgsFormat {
-  days: number[];
-  target: number;
-}
-
-const parseArguments = (args: string[]): ArgsFormat => {
-  if (args.length < 4) throw new Error('Not enough arguments');
-
-  args.splice(0, 2);
-
+export const parseArguments = (args: string[]): number[] => {
   const values = args.map(arg => {
     if (isNaN(Number(arg))) {
       throw new Error('Provided values were not numbers');
@@ -16,13 +7,10 @@ const parseArguments = (args: string[]): ArgsFormat => {
     return Number(arg);
   });
 
-  return {
-    target: values[-1],
-    days: values
-  };
+  return values;
 };
 
-const calculateExercises = (days : number[], target: number) => {
+export const calculateExercises = (days : number[], target: number) => {
   const average = days.reduce((partial, a) => partial + a, 0) / days.length;
   let rating: 1 | 2 | 3;
   let ratingDescription: string;
@@ -38,7 +26,7 @@ const calculateExercises = (days : number[], target: number) => {
     ratingDescription = 'Excelent work!';
   }
 
-  console.log({
+  return({
     periodLength: days.length,
     trainingDays: days.filter(val => val !== 0).length,
     target,
@@ -50,8 +38,8 @@ const calculateExercises = (days : number[], target: number) => {
 };
 
 try {
-  const { days, target } = parseArguments(process.argv);
-  calculateExercises(days, target);
+  console.log();
+
 } catch (error: unknown) {
   let errorMessage = 'Something bad happened.';
   if (error instanceof Error) {
