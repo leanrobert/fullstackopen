@@ -9,6 +9,11 @@ app.get('/api/ping', (_req, res) => {
   res.send('pong');
 });
 
+
+app.get('/api/patients', (_req, res) => {
+  res.send({});
+});
+
 const PORT = 3001;
 
 app.listen(PORT, () => {
