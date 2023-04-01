@@ -1,0 +1,5 @@
+{
+  "eslint.workingDirectories": [
+    "./ilaris-flight-diaries"
+  ]
+}
