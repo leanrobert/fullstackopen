@@ -1,6 +1,10 @@
-import { CourseListProps } from '../App'
+import { CoursePart } from "../App"
 
-const Total = ({ courses } : CourseListProps) => {
+interface TotalProps {
+  courses: CoursePart[];
+}
+
+const Total = ({ courses } : TotalProps) => {
   return (
     <p>
       Number of exercises{" "}
