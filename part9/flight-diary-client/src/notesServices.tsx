@@ -13,4 +13,5 @@ export const createEntry = (object: NewEntry) => {
   return axios
     .post<Entry>(baseUrl, object)
     .then(res => res.data)
+    .catch(err => err.response.data)
 }

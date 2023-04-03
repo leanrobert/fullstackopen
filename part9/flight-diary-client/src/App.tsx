@@ -8,16 +8,24 @@ const App = () => {
   const [visibility, setVisibility] = useState('');
   const [weather, setWeather] = useState('');
   const [comment, setComment] = useState('');
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     getEntries().then(data => setEntries(data))
   }, [])
 
-  const handleCreate = (e: React.SyntheticEvent) => {
+  const handleCreate = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    createEntry({ date, visibility, weather, comment }).then(data => {
-      setEntries(entries.concat(data))
-    })
+    const response = await createEntry({ date, visibility, weather, comment })
+
+    if(response.weather) {
+      setEntries(entries.concat(response))
+    } else {
+      setNotification(response)
+      setTimeout(() => {
+        setNotification('')
+      }, 3000)
+    }
 
     setDate('')
     setVisibility('')
@@ -28,6 +36,7 @@ const App = () => {
   return (
     <div>
       <h3>Add new entry</h3>
+      {notification && <p style={{ color: 'red' }}>{notification}</p>}
       <form onSubmit={handleCreate}>
         date <input value={date} onChange={e => setDate(e.target.value)} /><br />
         visibility <input value={visibility} onChange={e => setVisibility(e.target.value)} /><br />
