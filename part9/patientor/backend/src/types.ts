@@ -10,9 +10,19 @@ export interface Diagnose {
 	latin?: string
 }
 
+interface SickLeave {
+	startDate: string;
+	endDate: string;
+}
+
+interface Discharge {
+	date: string;
+	criteria: string;
+}
+
 interface BaseEntry {
 	id: string,
-	descriptiion: string,
+	description: string,
 	date: string,
 	specialist: string,
 	diagnosisCodes?: Array<Diagnose['code']>
@@ -32,12 +42,14 @@ interface HealthCheckEntry extends BaseEntry {
 
 interface HospitalEntry extends BaseEntry {
 	type: "Hospital";
-	healthCheckRating: HealthCheckRating;
+	healthCheckRating?: HealthCheckRating;
+	discharge?: Discharge;
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
+	employerName: string;
 	type: "OccupationalHealthcare";
-	healthCheckRating: HealthCheckRating;
+	sickLeave?: SickLeave;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
