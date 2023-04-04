@@ -1,4 +1,6 @@
-import { Entry } from '../../types'
+import { useEffect, useState } from 'react'
+import { Diagnose, Entry } from '../../types'
+import { getDiagnoses } from '../../services/diagnoses';
 
 interface Props {
   entry?: Entry
@@ -6,43 +8,21 @@ interface Props {
 
 
 const PatientEntriesDetails = ({ entry }: Props) => {
-  switch(entry?.type) {
-    case "HealthCheck":
-      return(
-        <div>
-          <p>{entry.date} {entry.description}</p>
-          <ul>
-            {entry.diagnosisCodes?.map(diagnose =>
-              <li key={diagnose}>{diagnose}</li>
-            )}
-          </ul>
-        </div>
-      )
-    case "Hospital":
-      return(
-        <div>
-          <p>{entry.date} {entry.description}</p>
-          <ul>
-            {entry.diagnosisCodes?.map(diagnose =>
-              <li key={diagnose}>{diagnose}</li>
-            )}
-          </ul>
-        </div>
-      )
-    case "OccupationalHealthcare":
-      return(
-        <div>
-          <p>{entry.date} {entry.description}</p>
-          <ul>
-            {entry.diagnosisCodes?.map(diagnose =>
-              <li key={diagnose}>{diagnose}</li>
-            )}
-          </ul>
-        </div>
-      )
-  }
+  const [diagnoses, setDiagnoses] = useState<Diagnose[]>([]);
+
+  useEffect(() => {
+    getDiagnoses().then(res => setDiagnoses(res.filter((diag: Diagnose) => entry?.diagnosisCodes?.includes(diag.code))))
+  }, [entry?.diagnosisCodes])
+
   return (
-    <div>PatientEntriesDetails</div>
+    <div>
+      <p>{entry?.date} {entry?.description}</p>
+      <ul>
+        {entry?.diagnosisCodes?.map((diagnose, i) =>
+          <li key={diagnose}>{diagnose} {diagnoses[i]?.name}</li>
+        )}
+      </ul>
+    </div>
   )
 }
 
